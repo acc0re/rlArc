@@ -1,6 +1,8 @@
 #ifndef ARC_GAME_H
 #define ARC_GAME_H
 
+#define ARC_ENGINE_UI_VISIBLE true
+
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #include "raylib.h"
 #pragma GCC diagnostic pop

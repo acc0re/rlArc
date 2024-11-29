@@ -7,6 +7,7 @@
 #include "raygui.h"
 
 
+
 // Define colors used in the game
 const Color COLOR_GRID = {40, 40, 40, 255};
 
@@ -29,8 +30,10 @@ void ArcGameDraw(void)
 
     ClearBackground(BLACK);
 
-
-    ArcDrawTaskbar();
+    if (ARC_ENGINE_UI_VISIBLE)
+    {
+        ArcDrawTaskbar();
+    }
 
     DrawFPS(GetScreenWidth() * 0.935, 5);
 
