@@ -1,9 +1,11 @@
 #include "arc_game.h"
 
-int main(void) {
+int main(void)
+{
     ArcGameInit(1280, 720);
 
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose())
+    {
         const float deltaTime = GetFrameTime();
         ArcGameUpdate(deltaTime);
         ArcGameDraw();

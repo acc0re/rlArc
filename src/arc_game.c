@@ -5,7 +5,7 @@
 #include "array.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
-#include "utils/arc_utils_color.h"
+
 
 // Define colors used in the game
 const Color COLOR_GRID = {40, 40, 40, 255};
@@ -20,13 +20,19 @@ void ArcGameInit(const int screenWidth, const int screenHeight)
 // Update the game state
 void ArcGameUpdate(float deltaTime)
 {
-
 }
 
 // Draw the game state
 void ArcGameDraw(void)
 {
     BeginDrawing();
+
+    ClearBackground(BLACK);
+
+
+    ArcDrawTaskbar();
+
+    DrawFPS(GetScreenWidth() * 0.935, 5);
 
     EndDrawing();
 }
@@ -35,4 +41,23 @@ void ArcGameDraw(void)
 void ArcGameUnload(void)
 {
     CloseWindow();
+}
+
+void ArcDrawTaskbar()
+{
+    constexpr int taskbarHeight = 60;
+    const Rectangle taskbarRect = {0, 0, GetScreenWidth(), taskbarHeight};
+
+    // Draw taskbar background
+    GuiPanel(taskbarRect, "rlArc");
+
+    // Draw taskbar buttons
+    if (GuiButton((Rectangle){10, 30, 100, 20}, "Tilemap"))
+    {
+       printf("Button 1 clicked\n");
+    }
+    if (GuiButton((Rectangle){120, 30, 100, 20}, "Character"))
+    {
+        printf("Button 2 clicked\n");
+    }
 }
