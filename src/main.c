@@ -1,14 +1,15 @@
-#include "game.h"
+#include "arc_game.h"
 
 int main(void) {
-    InitGame(1280, 720);
+    ArcGameInit(1280, 720);
 
     while (!WindowShouldClose()) {
-        UpdateGame();
-        DrawGame();
+        const float deltaTime = GetFrameTime();
+        ArcGameUpdate(deltaTime);
+        ArcGameDraw();
     }
 
-    UnloadGame();
+    ArcGameUnload();
 
     return 0;
 }
