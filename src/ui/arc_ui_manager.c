@@ -5,9 +5,9 @@
 #include "ui/mainmenu/arc_ui_mainmenu.h"
 #include "ui/mainmenu/arc_ui_tilemap.h"
 
-
 static UIState currentState;
 
+// Initialize the UI manager
 void ArcUIManagerInit(void)
 {
     currentState = UI_STATE_MAIN_MENU; // Set initial state
@@ -43,11 +43,13 @@ void ArcUIManagerDraw(void)
     }
 }
 
+// Unload the UI manager resources
 void ArcUIManagerUnload(void)
 {
     // Unload UI components here
 }
 
+// Set the current UI state
 void ArcUIManagerSetState(const UIState state)
 {
     currentState = state;

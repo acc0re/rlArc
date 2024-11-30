@@ -18,7 +18,7 @@ static void ArcDrawMainMenuTaskbar()
     const Rectangle taskbarRect = {0, 0, GetScreenWidth(), taskbarHeight};
 
     // Draw taskbar background
-    GuiPanel(taskbarRect, "rlArc");
+    GuiPanel(taskbarRect, "#152#rlArc");
 
     // Draw taskbar buttons
     if (GuiButton((Rectangle){10, 30, 100, 20}, "Tilemap"))

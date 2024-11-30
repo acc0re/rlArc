@@ -17,10 +17,10 @@ static void ArcDrawTilemapTaskbar(void)
     const Rectangle taskbarRect = {0, 0, GetScreenWidth(), taskbarHeight};
 
     // Draw taskbar background
-    GuiPanel(taskbarRect, "Tilemap Editor");
+    GuiPanel(taskbarRect, "#97#Tilemap Editor");
 
     // Draw taskbar buttons
-    if (GuiButton((Rectangle){10, 30, 100, 20}, "#118#Back"))
+    if (GuiButton((Rectangle){10, 30, 20, 20}, "#118#"))
     {
         ArcUIManagerSetState(UI_STATE_MAIN_MENU);
     }
