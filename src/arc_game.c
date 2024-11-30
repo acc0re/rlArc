@@ -1,12 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
 #include "arc_game.h"
-#include "array.h"
-#define RAYGUI_IMPLEMENTATION
+#include "ui/arc_ui_manager.h"
 #include "raygui.h"
-
-
 
 // Define colors used in the game
 const Color COLOR_GRID = {40, 40, 40, 255};
@@ -32,7 +26,8 @@ void ArcGameDraw(void)
 
     if (ARC_ENGINE_UI_VISIBLE)
     {
-        ArcDrawTaskbar();
+        //ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+        ArcUIManagerDraw();
     }
 
     DrawFPS(GetScreenWidth() * 0.935, 5);
@@ -46,21 +41,3 @@ void ArcGameUnload(void)
     CloseWindow();
 }
 
-void ArcDrawTaskbar()
-{
-    constexpr int taskbarHeight = 60;
-    const Rectangle taskbarRect = {0, 0, GetScreenWidth(), taskbarHeight};
-
-    // Draw taskbar background
-    GuiPanel(taskbarRect, "rlArc");
-
-    // Draw taskbar buttons
-    if (GuiButton((Rectangle){10, 30, 100, 20}, "Tilemap"))
-    {
-       printf("Button 1 clicked\n");
-    }
-    if (GuiButton((Rectangle){120, 30, 100, 20}, "Character"))
-    {
-        printf("Button 2 clicked\n");
-    }
-}

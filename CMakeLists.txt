@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(rlArc C)
-set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD 99)
 
 # Adding Raylib
 include(FetchContent)
@@ -29,7 +29,14 @@ add_executable(${PROJECT_NAME}
         src/array.c
         header/array.h
         header/utils/arc_utils_color.h
-        src/arc_utils_color.c
+        src/utils/arc_utils_color.c
+        src/ui/mainmenu/arc_ui_mainmenu.c
+        header/ui/mainmenu/arc_ui_mainmenu.h
+        header/ui/arc_ui_states.h
+        header/ui/arc_ui_manager.h
+        src/ui/arc_ui_manager.c
+        header/ui/mainmenu/arc_ui_tilemap.h
+        src/ui/mainmenu/arc_ui_tilemap.c
 )
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
