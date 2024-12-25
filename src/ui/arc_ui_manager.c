@@ -20,7 +20,7 @@ void ArcUIManagerUpdate(float deltaTime)
     {
     case UI_STATE_MAIN_MENU:
         // Update main menu components
-            break;
+        break;
     default:
         currentState = UI_STATE_MAIN_MENU;
     }
@@ -37,6 +37,9 @@ void ArcUIManagerDraw(void)
         break;
     case UI_STATE_TILEMAP:
         ArcDrawTilemapMenu();
+        break;
+    case UI_STATE_CHARACTER:
+        ArcDrawCharacterMenu();
         break;
     default:
         currentState = UI_STATE_MAIN_MENU;

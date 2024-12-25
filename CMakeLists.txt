@@ -37,6 +37,7 @@ add_executable(${PROJECT_NAME}
         src/ui/arc_ui_manager.c
         header/ui/mainmenu/arc_ui_tilemap.h
         src/ui/mainmenu/arc_ui_tilemap.c
+        main.c
 )
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})

@@ -2,12 +2,13 @@
 #include "ui/arc_ui_manager.h"
 #include "raygui.h"
 
-// Define colors used in the game
-const Color COLOR_GRID = {40, 40, 40, 255};
+#define ARC_ENGINE_DRAW_FPS false
 
 // Initialize the game
 void ArcGameInit(const int screenWidth, const int screenHeight)
 {
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
     InitWindow(screenWidth, screenHeight, "rlArc");
     SetTargetFPS(60);
 }
@@ -20,8 +21,6 @@ void ArcGameUpdate(float deltaTime)
 // Draw the game state
 void ArcGameDraw(void)
 {
-    BeginDrawing();
-
     ClearBackground(BLACK);
 
     if (ARC_ENGINE_UI_VISIBLE)
@@ -30,7 +29,13 @@ void ArcGameDraw(void)
         ArcUIManagerDraw();
     }
 
-    DrawFPS(GetScreenWidth() * 0.935, 5);
+    BeginDrawing();
+
+
+    if (ARC_ENGINE_DRAW_FPS)
+    {
+        DrawFPS(GetScreenWidth() * 0.935, 5);
+    }
 
     EndDrawing();
 }
@@ -40,4 +45,3 @@ void ArcGameUnload(void)
 {
     CloseWindow();
 }
-
