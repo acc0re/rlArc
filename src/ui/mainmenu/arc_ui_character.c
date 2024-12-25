@@ -1,4 +1,4 @@
-#include <stddef.h>
+#include <stdio.h>
 #include "raygui/raygui.h"
 #include "ui/arc_ui_manager.h"
 #include "ui/mainmenu/arc_ui_character.h"
@@ -7,8 +7,15 @@
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "raygui/gui_window_file_dialog.h"
 
-// State for the file dialog
+// File dialog states
+typedef enum {
+    FILE_DIALOG_NONE,
+    FILE_DIALOG_OPEN,
+    FILE_DIALOG_SAVE
+} FileDialogMode;
+
 static bool fileDialogActive = false;
+static FileDialogMode fileDialogMode = FILE_DIALOG_NONE;
 static GuiWindowFileDialogState fileDialogState;
 
 void ArcDrawCharacterMenu(void)
@@ -21,8 +28,8 @@ void ArcDrawCharacterMenu(void)
         GuiWindowFileDialog(&fileDialogState);
         if (!fileDialogState.windowActive)
         {
-            fileDialogActive = false;
-            // Handle the selected file (fileDialogState.fileNameText)
+            fileDialogActive = false;  // Close dialog when done
+            HandleFileDialog(fileDialogState.fileNameText);  // Handle the selected file
         }
     }
 }
@@ -44,13 +51,39 @@ static void ArcDrawCharacterTaskbar(void)
     // Add Character file
     if (GuiButton((Rectangle){40, 30, 20, 20}, RGUI_ICON(RAYGUI_ICON_FILE_ADD)))
     {
+        // TODO: Implement character file creation
     }
 
     // Open Character file
     if (GuiButton((Rectangle){65, 30, 20, 20}, RGUI_ICON(RAYGUI_ICON_FILE_OPEN)))
     {
-        fileDialogActive = true; // Activate file dialog
-        fileDialogState = InitGuiWindowFileDialog(NULL); // Initialize file dialog state
-        fileDialogState.windowActive = true; // Set the dialog to active
+        fileDialogMode = FILE_DIALOG_OPEN;
+        fileDialogActive = true;
+        fileDialogState = InitGuiWindowFileDialog(GetWorkingDirectory());
+        fileDialogState.windowActive = true;
+    }
+
+    // Save Character file
+    if (GuiButton((Rectangle){90, 30, 20, 20}, RGUI_ICON(RAYGUI_ICON_FILE_SAVE_CLASSIC)))
+    {
+        fileDialogMode = FILE_DIALOG_SAVE;
+        fileDialogActive = true;
+        fileDialogState = InitGuiWindowFileDialog(GetWorkingDirectory());
+        fileDialogState.windowActive = true;
+    }
+}
+
+// Handle the selected file
+static void HandleFileDialog(const char *fileName)
+{
+    if (fileDialogMode == FILE_DIALOG_OPEN)
+    {
+        // Handle file opening (e.g., load the character data from the file)
+        printf("File Opened: %s\n", fileName);
+    }
+    else if (fileDialogMode == FILE_DIALOG_SAVE)
+    {
+        // Handle file saving (e.g., save character data to the file)
+        printf("File Saved: %s\n", fileName);
     }
 }

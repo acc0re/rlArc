@@ -8,6 +8,7 @@
 #define RGUI_ICON(icon) ("#" icon "#")
 #define RGUI_ICON_TEXT(icon, text) ("#" icon "#" text)
 
+#define RAYGUI_ICON_FILE_SAVE_CLASSIC "2"
 #define RAYGUI_ICON_FILE_OPEN "5"
 #define RAYGUI_ICON_FILE_ADD "6"
 #define RAYGUI_ICON_GRID "97"
