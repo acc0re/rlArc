@@ -4,6 +4,7 @@
 #include "ui/arc_ui_manager.h"
 #include "ui/mainmenu/arc_ui_mainmenu.h"
 #include "ui/mainmenu/arc_ui_tilemap.h"
+#include "ui/mainmenu/arc_ui_character.h"
 
 static UIState currentState;
 

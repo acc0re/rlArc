@@ -1,6 +1,6 @@
 #include "arc_game.h"
 #include "ui/arc_ui_manager.h"
-#include "raygui.h"
+#include "raygui/raygui.h"
 
 #define ARC_ENGINE_DRAW_FPS false
 

@@ -1,6 +1,7 @@
 #include "arc_game.h"
 #define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
+#include "raygui/raygui.h"
+
 
 int main(void)
 {

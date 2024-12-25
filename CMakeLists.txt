@@ -24,7 +24,7 @@ set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/header/") # Define PROJECT_INCLUD
 # Declaring our executable
 add_executable(${PROJECT_NAME}
         header/arc_game.h
-        header/raygui.h
+        header/raygui/raygui.h
         src/arc_game.c
         src/array.c
         header/array.h
@@ -38,6 +38,8 @@ add_executable(${PROJECT_NAME}
         header/ui/mainmenu/arc_ui_tilemap.h
         src/ui/mainmenu/arc_ui_tilemap.c
         main.c
+        header/raygui/raygui_icon_helper.h
+        header/raygui/gui_window_file_dialog.h
 )
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
