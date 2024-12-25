@@ -31,6 +31,12 @@ void ArcGameDraw(void)
 
     BeginDrawing();
 
+    /* TODO: React to UI State
+    if (ArcUIManagerGetState() == UI_STATE_CHARACTER)
+    {
+        DrawText("Character Editor", 10, 150, 20, SKYBLUE);
+    }
+    */
 
     if (ARC_ENGINE_DRAW_FPS)
     {

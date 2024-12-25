@@ -58,3 +58,9 @@ void ArcUIManagerSetState(const UIState state)
 {
     currentState = state;
 }
+
+//Gets the current UI State
+UIState ArcUIManagerGetState(void)
+{
+    return currentState;
+}

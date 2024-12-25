@@ -7,7 +7,6 @@
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "raygui/gui_window_file_dialog.h"
 
-// File dialog states
 typedef enum {
     FILE_DIALOG_NONE,
     FILE_DIALOG_OPEN,
@@ -37,7 +36,7 @@ void ArcDrawCharacterMenu(void)
 static void ArcDrawCharacterTaskbar(void)
 {
     const int taskbarHeight = 60;
-    const Rectangle taskbarRect = {0, 0, GetScreenWidth(), taskbarHeight};
+    const Rectangle taskbarRect = {0.0f, 0.0f, (float)GetScreenWidth(), (float)taskbarHeight};
 
     // Draw taskbar background
     GuiPanel(taskbarRect, RGUI_ICON_TEXT(RAYGUI_ICON_PLAYER, "Character Editor"));

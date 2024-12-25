@@ -18,4 +18,7 @@ void ArcUIManagerUnload(void);
 // Set the current UI state
 void ArcUIManagerSetState(UIState state);
 
+// Get the current UI state
+UIState ArcUIManagerGetState(void);
+
 #endif // ARC_UI_MANAGER_H
