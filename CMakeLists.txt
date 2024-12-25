@@ -26,7 +26,6 @@ add_executable(${PROJECT_NAME}
         header/arc_game.h
         header/raygui/raygui.h
         src/arc_game.c
-        src/array.c
         header/array.h
         header/utils/arc_utils_color.h
         src/utils/arc_utils_color.c
@@ -40,6 +39,9 @@ add_executable(${PROJECT_NAME}
         main.c
         header/raygui/raygui_icon_helper.h
         header/raygui/gui_window_file_dialog.h
+        header/state/arc_game_state_manager.h
+        src/state/arc_game_state_manager.c
+        header/state/arc_game_states.h
 )
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})
