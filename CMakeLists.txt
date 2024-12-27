@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME}
         header/state/arc_game_state_manager.h
         src/state/arc_game_state_manager.c
         header/state/arc_game_states.h
+        src/character_tex_viewer/character_tex_viewer.c
+        header/character_tex_viewer/character_tex_viewer.h
 )
 target_sources(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_INCLUDE})

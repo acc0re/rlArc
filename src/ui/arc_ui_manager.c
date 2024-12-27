@@ -5,6 +5,7 @@
 #include "ui/mainmenu/arc_ui_mainmenu.h"
 #include "ui/mainmenu/arc_ui_tilemap.h"
 #include "ui/mainmenu/arc_ui_character.h"
+#include "state/arc_game_state_manager.h"
 
 static UIState currentState;
 
@@ -50,13 +51,22 @@ void ArcUIManagerDraw(void)
 // Unload the UI manager resources
 void ArcUIManagerUnload(void)
 {
-    // Unload UI components here
+
 }
 
 // Set the current UI state
 void ArcUIManagerSetState(const UIState state)
 {
     currentState = state;
+
+    switch (currentState)
+    {
+    case UI_STATE_CHARACTER:
+        ArcGameStateManagerSetState(GAME_STATE_CHARACTER_TEX_VIEWER);
+        break;
+    default:
+        ArcGameStateManagerSetState(GAME_STATE_MAIN_MENU);
+    }
 }
 
 //Gets the current UI State

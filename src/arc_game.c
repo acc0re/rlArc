@@ -28,31 +28,19 @@ void ArcGameDraw(void)
 {
     ClearBackground(BLACK);
 
-    if (ARC_ENGINE_UI_VISIBLE)
-    {
-        //ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-        ArcUIManagerDraw();
-    }
-
     BeginDrawing();
 
-    /* TODO: Handle this in the specific game states
-    if (ArcUIManagerGetState() == UI_STATE_CHARACTER)
-    {
-        DrawText("Character Editor", 10, 150, 20, SKYBLUE);
-    }
-    else if (ArcUIManagerGetState() == UI_STATE_TILEMAP)
-    {
-        DrawText("Tilemap Editor", 10, 150, 20, SKYBLUE);
-    }
-*/
     ArcGameStateManagerDraw();
 
     if (ARC_ENGINE_DRAW_FPS)
     {
         DrawFPS(GetScreenWidth() * 0.935, 5);
     }
-
+    if (ARC_ENGINE_UI_VISIBLE)
+    {
+        //ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+        ArcUIManagerDraw();
+    }
     EndDrawing();
 }
 
