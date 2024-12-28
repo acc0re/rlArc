@@ -17,6 +17,10 @@ static void DrawScaleText(float scale);
 
 static void ZoomSpriteSheet(void);
 
-static void Drag();
+static void Drag(void);
+
+static void SelectCell(void);
+
+static void DrawLastSelectedCell(void);
 
 #endif //CHARACTER_TEX_VIEWER_H
