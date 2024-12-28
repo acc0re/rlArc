@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "character_tex_viewer/character_tex_viewer.h"
+#include "ui/mainmenu/arc_ui_character.h"
 
 static Texture2D spriteSheet;
 static float scale = 2.0f;
@@ -27,6 +28,8 @@ void CharacterTexViewerInit(void)
     lastMouseX = 0.0f;
     lastMouseY = 0.0f;
     cellSize = 24;
+
+    ArcUICharacterSetZoomText(scale);
 }
 
 void CharacterTexViewerUpdate(float deltaTime)

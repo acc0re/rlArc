@@ -16,13 +16,15 @@ typedef enum
     FILE_DIALOG_SPRITESHEET,
 } FileDialogMode;
 
+const char* zoom = "";
+
 static bool fileDialogActive = false;
 static FileDialogMode fileDialogMode = FILE_DIALOG_NONE;
 static GuiWindowFileDialogState fileDialogState;
 
 void ArcDrawCharacterMenu(void)
 {
-    ArcDrawCharacterTaskbar();
+    internal_ArcDrawCharacterTaskbar();
 
     // Draw file dialog if active
     if (fileDialogActive)
@@ -38,7 +40,7 @@ void ArcDrawCharacterMenu(void)
                          fileDialogState.fileNameText);
 
 
-                HandleFileDialog((fullPath));
+                internal_HandleFileDialog((fullPath));
             }
             else
             {
@@ -47,9 +49,12 @@ void ArcDrawCharacterMenu(void)
             }
         }
     }
+
+    internal_DrawCharacterProperties();
+    internal_DrawFooterBar();
 }
 
-static void ArcDrawCharacterTaskbar(void)
+static void internal_ArcDrawCharacterTaskbar(void)
 {
     const int taskbarHeight = 60;
     const Rectangle taskbarRect = {0.0f, 0.0f, (float)GetScreenWidth(), (float)taskbarHeight};
@@ -96,8 +101,56 @@ static void ArcDrawCharacterTaskbar(void)
     }
 }
 
+static void internal_DrawCharacterProperties(void)
+{
+    const int windowWidth = 300;
+    const int windowHeight = GetScreenHeight();
+
+    const Rectangle windowRect = {(float)(GetScreenWidth() - windowWidth), 60, (float)windowWidth, (float)windowHeight - 60};
+
+    GuiWindowBox(windowRect, "Spritesheet Properties");
+
+    static char columnText[128] = "4";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 100, windowWidth - 20, 20}, "Columns:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 100, windowWidth - 100, 30}, columnText, sizeof(columnText), false);
+
+    static char rowText[128] = "4";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 140, windowWidth - 20, 20}, "Rows:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 140, windowWidth - 100, 30}, rowText, sizeof(rowText), false);
+
+    static char spriteWidthText[128] = "64";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 180, windowWidth - 20, 20}, "Sprite Width:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 180, windowWidth - 100, 30}, spriteWidthText, sizeof(spriteWidthText), false);
+
+    static char spriteHeightText[128] = "64";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 220, windowWidth - 20, 20}, "Sprite Height:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 220, windowWidth - 100, 30}, spriteHeightText, sizeof(spriteHeightText), false);
+
+    GuiWindowBox((Rectangle){(float)(GetScreenWidth() - windowWidth), 320, (float)windowWidth, 220}, "Character Values");
+
+    // HP
+    static char hpText[128] = "100";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 380, windowWidth - 20, 20}, "HP:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 380, windowWidth - 100, 30}, hpText, sizeof(hpText), false);
+
+    // ATK
+    static char attackText[128] = "50";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 420, windowWidth - 20, 20}, "Attack:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 420, windowWidth - 100, 30}, attackText, sizeof(attackText), false);
+
+    // DEF
+    static char defenseText[128] = "30";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 460, windowWidth - 20, 20}, "Defense:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 460, windowWidth - 100, 30}, defenseText, sizeof(defenseText), false);
+
+    // SPD
+    static char speedText[128] = "10";
+    GuiLabel((Rectangle){(float)(GetScreenWidth() - windowWidth) + 10, 500, windowWidth - 20, 20}, "Speed:");
+    GuiTextBox((Rectangle){(float)(GetScreenWidth() - windowWidth) + 80, 500, windowWidth - 100, 30}, speedText, sizeof(speedText), false);
+}
+
 // Handle the selected file
-static void HandleFileDialog(const char* fileName)
+static void internal_HandleFileDialog(const char* fileName)
 {
     if (fileDialogMode == FILE_DIALOG_SPRITESHEET)
     {
@@ -109,4 +162,30 @@ static void HandleFileDialog(const char* fileName)
         //TODO; Implement saving of character file
         printf("File Saved: %s\n", fileName);
     }
+}
+
+//Footer bar
+static void internal_DrawFooterBar(void)
+{
+    const int footerHeight = 24;
+    const Rectangle footerRect = {0.0f, (float)(GetScreenHeight() - footerHeight), (float)GetScreenWidth(), (float)footerHeight};
+
+    GuiPanel(footerRect, NULL);
+
+    GuiLabel((Rectangle){10, GetScreenHeight() - footerHeight + 2, 80, 20}, "Zoom:");
+    GuiTextBox((Rectangle){90, GetScreenHeight() - footerHeight + 2, 80, 20}, zoom, 32, false);
+
+
+    static int selectedCell = 1;
+    GuiLabel((Rectangle){250, GetScreenHeight() - footerHeight + 2, 120, 20}, "Selected Cell:");
+    GuiTextBox((Rectangle){370, GetScreenHeight() - footerHeight + 2, 50, 20}, TextFormat("%d", selectedCell), 32, false);
+}
+
+void ArcUICharacterSetZoomText(float scale)
+{
+    char* scaleText[64];
+    sprintf(scaleText, "Scale: %.2f", scale);
+
+    zoom = scaleText;
+
 }
