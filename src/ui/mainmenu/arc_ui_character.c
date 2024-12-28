@@ -6,11 +6,14 @@
 
 #define GUI_WINDOW_FILE_DIALOG_IMPLEMENTATION
 #include "raygui/gui_window_file_dialog.h"
+#include "character_tex_viewer/character_tex_viewer.h"
 
-typedef enum {
+typedef enum
+{
     FILE_DIALOG_NONE,
     FILE_DIALOG_OPEN,
-    FILE_DIALOG_SAVE
+    FILE_DIALOG_SAVE,
+    FILE_DIALOG_SPRITESHEET,
 } FileDialogMode;
 
 static bool fileDialogActive = false;
@@ -27,8 +30,21 @@ void ArcDrawCharacterMenu(void)
         GuiWindowFileDialog(&fileDialogState);
         if (!fileDialogState.windowActive)
         {
-            fileDialogActive = false;  // Close dialog when done
-            HandleFileDialog(fileDialogState.fileNameText);  // Handle the selected file
+            fileDialogActive = false; // Close dialog when done
+            char fullPath[2048];
+            if (sizeof(fullPath) <= 2048)
+            {
+                snprintf(fullPath, sizeof(fullPath), "%s/%s", fileDialogState.dirPathText,
+                         fileDialogState.fileNameText);
+
+
+                HandleFileDialog((fullPath));
+            }
+            else
+            {
+                printf("Path too long\n");
+                return;
+            }
         }
     }
 }
@@ -70,19 +86,27 @@ static void ArcDrawCharacterTaskbar(void)
         fileDialogState = InitGuiWindowFileDialog(GetWorkingDirectory());
         fileDialogState.windowActive = true;
     }
+
+    if (GuiButton((Rectangle){115, 30, 20, 20}, RGUI_ICON(RAYGUI_ICON_IMAGE)))
+    {
+        fileDialogMode = FILE_DIALOG_SPRITESHEET;
+        fileDialogActive = true;
+        fileDialogState = InitGuiWindowFileDialog(GetWorkingDirectory());
+        fileDialogState.windowActive = true;
+    }
 }
 
 // Handle the selected file
-static void HandleFileDialog(const char *fileName)
+static void HandleFileDialog(const char* fileName)
 {
-    if (fileDialogMode == FILE_DIALOG_OPEN)
+    if (fileDialogMode == FILE_DIALOG_SPRITESHEET)
     {
-        // Handle file opening (e.g., load the character data from the file)
-        printf("File Opened: %s\n", fileName);
+        //Load Spritesheet to the Character Editor
+        CharacterTexViewerLoadSpritesheet(fileName);
     }
     else if (fileDialogMode == FILE_DIALOG_SAVE)
     {
-        // Handle file saving (e.g., save character data to the file)
+        //TODO; Implement saving of character file
         printf("File Saved: %s\n", fileName);
     }
 }

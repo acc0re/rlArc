@@ -64,6 +64,8 @@ void ArcGameStateManagerUnload(void)
 
 void ArcGameStateManagerSetState(GameState state)
 {
+    ArcGameStateManagerUnload();
+
     currentState = state;
 
     switch (currentState)

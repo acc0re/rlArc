@@ -1,7 +1,5 @@
-#include "character_tex_viewer/character_tex_viewer.h"
-
-#include "raylib.h"
 #include <stdio.h>
+#include "character_tex_viewer/character_tex_viewer.h"
 
 static Texture2D spriteSheet;
 static float scale = 2.0f;
@@ -16,27 +14,31 @@ static Vector2 selectedCell = {0, 0};
 
 void CharacterTexViewerInit(void)
 {
-    const char* absolutePath = "X:/godot/timebound/Scenes/Character/Heroes/Yuki/Yuki.png";
-
-    spriteSheet = LoadTexture(absolutePath);
-
-    if (spriteSheet.id == 0)
+    if (spriteSheet.id > 0)
     {
-        printf("Error: Sprite-Sheet not found! Path: %s\n", absolutePath);
-        return;
+        UnloadTexture(spriteSheet);
     }
+
+    spriteSheet.id = 0;
+    scale = 2.0f;
+    spriteSheetPos.x = 100;
+    spriteSheetPos.y = 100;
+    isDragging = false;
+    lastMouseX = 0.0f;
+    lastMouseY = 0.0f;
+    cellSize = 24;
 }
 
 void CharacterTexViewerUpdate(float deltaTime)
 {
     //Zoom with Mousewheel
-    ZoomSpriteSheet();
+    internal_ZoomSpriteSheet();
 
     //Drag with CTRL + Left Mouse Button
-    Drag();
+    internal_Drag();
 
     //Select a cell with Left Mouse Button
-    SelectCell();
+    internal_SelectCell();
 }
 
 void CharacterTexViewerDraw(void)
@@ -44,29 +46,23 @@ void CharacterTexViewerDraw(void)
     int spriteWidth = spriteSheet.width;
     int spriteHeight = spriteSheet.height;
 
-    int gridSize = (int)(cellSize * scale);
-    Color gridColor = GRAY;
-
     if (spriteSheet.id > 0)
     {
+        // Zeichne das Sprite-Sheet
         DrawTextureEx(spriteSheet, spriteSheetPos, 0.0f, scale, WHITE);
 
-        for (int x = spriteSheetPos.x; x <= spriteSheetPos.x + spriteWidth * scale; x += gridSize)
-        {
-            DrawLine(x, spriteSheetPos.y, x, spriteSheetPos.y + spriteHeight * scale, gridColor);
-        }
+        // Zeichne das Gitter
+        internal_DrawGrid(spriteWidth, spriteHeight);
 
-        for (int y = spriteSheetPos.y; y <= spriteSheetPos.y + spriteHeight * scale; y += gridSize)
-        {
-            DrawLine(spriteSheetPos.x, y, spriteSheetPos.x + spriteWidth * scale, y, gridColor);
-        }
+        // Zeichne den aktuellen Zoomfaktor
+        internal_DrawScaleText(scale);
 
-        DrawScaleText(scale);
-        DrawLastSelectedCell();
+        // Zeichne die zuletzt ausgewählte Zelle
+        internal_DrawLastSelectedCell();
     }
     else
     {
-        DrawText("Error: Spritesheet could not be loaded!", 10, 50, 20, RED);
+        DrawText("No Spritesheet selected!", 10, 80, 20, RED);
     }
 }
 
@@ -79,7 +75,7 @@ void CharacterTexViewerUnload(void)
 }
 
 // Zeichne den Text, der den aktuellen Zoomfaktor anzeigt
-static void DrawScaleText(float scale)
+static void internal_DrawScaleText(float scale)
 {
     char scaleText[64];
     sprintf(scaleText, "Scale: %.2f", scale);
@@ -89,7 +85,7 @@ static void DrawScaleText(float scale)
     DrawText(scaleText, GetScreenWidth() - textWidth - 10, 80, 20, SKYBLUE);
 }
 
-static void ZoomSpriteSheet(void)
+static void internal_ZoomSpriteSheet(void)
 {
     if ((IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)))
     {
@@ -104,7 +100,7 @@ static void ZoomSpriteSheet(void)
     }
 }
 
-static void Drag()
+static void internal_Drag()
 {
     if ((IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL)) && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
@@ -122,6 +118,18 @@ static void Drag()
             spriteSheetPos.x += deltaX;
             spriteSheetPos.y += deltaY;
 
+            /* TODO: Implement screen limits optional
+            if (spriteSheetPos.x > GetScreenWidth() - spriteSheet.width * scale)
+                spriteSheetPos.x = GetScreenWidth() - spriteSheet.width * scale;
+            if (spriteSheetPos.y > GetScreenHeight() - spriteSheet.height * scale)
+                spriteSheetPos.y = GetScreenHeight() - spriteSheet.height * scale;
+
+            if (spriteSheetPos.x < 0)
+                spriteSheetPos.x = 0;
+            if (spriteSheetPos.y < 0)
+                spriteSheetPos.y = 0;
+            */
+
             lastMouseX = GetMouseX();
             lastMouseY = GetMouseY();
         }
@@ -132,7 +140,7 @@ static void Drag()
     }
 }
 
-static void SelectCell(void)
+static void internal_SelectCell(void)
 {
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isDragging)
     {
@@ -160,7 +168,7 @@ static void SelectCell(void)
 }
 
 
-static void DrawLastSelectedCell(void)
+static void internal_DrawLastSelectedCell(void)
 {
     int cellWidth = (int)(cellSize * scale);
     int cellHeight = (int)(cellSize * scale);
@@ -168,7 +176,10 @@ static void DrawLastSelectedCell(void)
     int x = (int)(spriteSheetPos.x + selectedCell.x * cellWidth);
     int y = (int)(spriteSheetPos.y + selectedCell.y * cellHeight);
 
-    DrawRectangleLines(x, y, cellWidth, cellHeight, MAGENTA);
+    if (selectedCell.x >= 0 && selectedCell.y >= 0)
+    {
+        DrawRectangleLines(x, y, cellWidth, cellHeight, MAGENTA);
+    }
 
     char text[64];
     sprintf(text, "Selected Cell: X = %i, Y = %i", (int)selectedCell.x, (int)selectedCell.y);
@@ -176,4 +187,36 @@ static void DrawLastSelectedCell(void)
     int textWidth = MeasureText(text, 20);
 
     DrawText(text, GetScreenWidth() - textWidth - 10, 105, 20, SKYBLUE);
+}
+
+static void internal_DrawGrid(int spriteWidth, int spriteHeight)
+{
+    int gridSize = (int)(cellSize * scale);
+    Color gridColor = GRAY;
+
+    for (int x = spriteSheetPos.x; x <= spriteSheetPos.x + spriteWidth * scale; x += gridSize)
+    {
+        DrawLine(x, spriteSheetPos.y, x, spriteSheetPos.y + spriteHeight * scale, gridColor);
+    }
+
+    for (int y = spriteSheetPos.y; y <= spriteSheetPos.y + spriteHeight * scale; y += gridSize)
+    {
+        DrawLine(spriteSheetPos.x, y, spriteSheetPos.x + spriteWidth * scale, y, gridColor);
+    }
+}
+
+void CharacterTexViewerLoadSpritesheet(const char* fileName)
+{
+    if (spriteSheet.id > 0)
+    {
+        UnloadTexture(spriteSheet);
+    }
+
+    spriteSheet = LoadTexture(fileName);
+}
+
+//Get loaded sprite sheet
+Texture2D CharacterTexViewerGetSpritesheet(void)
+{
+    return spriteSheet;
 }
