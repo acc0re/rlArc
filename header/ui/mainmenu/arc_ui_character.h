@@ -2,7 +2,8 @@
 #define ARC_UI_CHARACTER_H
 
 void ArcDrawCharacterMenu(void);
-void ArcUICharacterSetZoomText(float scale);
+void ArcUICharacterSetZoomText(float* scale);
+void ArcUICharacterSetSelectedCell(Vector2* pos);
 
 
 static void internal_ArcDrawCharacterTaskbar(void);

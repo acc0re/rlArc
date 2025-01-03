@@ -2,6 +2,8 @@
 // Created by Alexander Chabowski on 30.11.24.
 //
 #include "ui/arc_ui_manager.h"
+
+#include "raygui/raygui.h"
 #include "ui/mainmenu/arc_ui_mainmenu.h"
 #include "ui/mainmenu/arc_ui_tilemap.h"
 #include "ui/mainmenu/arc_ui_character.h"

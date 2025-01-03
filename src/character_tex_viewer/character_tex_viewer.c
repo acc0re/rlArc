@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "character_tex_viewer/character_tex_viewer.h"
+
+#include "raygui/raygui.h"
 #include "ui/mainmenu/arc_ui_character.h"
 
 static Texture2D spriteSheet;
@@ -29,7 +31,11 @@ void CharacterTexViewerInit(void)
     lastMouseY = 0.0f;
     cellSize = 24;
 
-    ArcUICharacterSetZoomText(scale);
+    //Enable raygui tool tips
+    GuiEnableTooltip();
+    
+    ArcUICharacterSetZoomText(&scale);
+    ArcUICharacterSetSelectedCell(&selectedCell);
 }
 
 void CharacterTexViewerUpdate(float deltaTime)
@@ -57,9 +63,6 @@ void CharacterTexViewerDraw(void)
         // Zeichne das Gitter
         internal_DrawGrid(spriteWidth, spriteHeight);
 
-        // Zeichne den aktuellen Zoomfaktor
-        internal_DrawScaleText(scale);
-
         // Zeichne die zuletzt ausgewählte Zelle
         internal_DrawLastSelectedCell();
     }
@@ -75,17 +78,9 @@ void CharacterTexViewerUnload(void)
     {
         UnloadTexture(spriteSheet);
     }
-}
 
-// Zeichne den Text, der den aktuellen Zoomfaktor anzeigt
-static void internal_DrawScaleText(float scale)
-{
-    char scaleText[64];
-    sprintf(scaleText, "Scale: %.2f", scale);
-
-    int textWidth = MeasureText(scaleText, 20);
-
-    DrawText(scaleText, GetScreenWidth() - textWidth - 10, 80, 20, SKYBLUE);
+    //Disable raygui tool tips after closing
+    GuiDisableTooltip();
 }
 
 static void internal_ZoomSpriteSheet(void)
@@ -95,10 +90,16 @@ static void internal_ZoomSpriteSheet(void)
         float mouseWheelMove = GetMouseWheelMove();
         if (mouseWheelMove != 0.0f)
         {
+            int previousScale = scale;
             scale += (int)mouseWheelMove;
 
             if (scale < 1) scale = 1;
             if (scale > 10) scale = 10;
+
+            if (scale != previousScale)
+            {
+                ArcUICharacterSetZoomText(&scale);
+            }
         }
     }
 }
@@ -167,6 +168,8 @@ static void internal_SelectCell(void)
 
         if (selectedCell.x < 0) selectedCell.x = 0;
         if (selectedCell.y < 0) selectedCell.y = 0;
+
+        ArcUICharacterSetSelectedCell(&selectedCell);
     }
 }
 
@@ -183,13 +186,6 @@ static void internal_DrawLastSelectedCell(void)
     {
         DrawRectangleLines(x, y, cellWidth, cellHeight, MAGENTA);
     }
-
-    char text[64];
-    sprintf(text, "Selected Cell: X = %i, Y = %i", (int)selectedCell.x, (int)selectedCell.y);
-
-    int textWidth = MeasureText(text, 20);
-
-    DrawText(text, GetScreenWidth() - textWidth - 10, 105, 20, SKYBLUE);
 }
 
 static void internal_DrawGrid(int spriteWidth, int spriteHeight)
